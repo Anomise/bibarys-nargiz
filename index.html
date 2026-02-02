@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+<html lang="ru">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Аниме Новелла - Бибарыс и Наргиз</title>
+    <style>
+        :root {
+            --color-bg: #1a1a2e;
+            --color-surface: #16213e;
+            --color-text: #eaeaea;
+            --color-primary: #e94560;
+            --color-secondary: #0f3460;
+            --color-accent: #ff6b9d;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, var(--color-bg) 0%, var(--color-secondary) 100%);
+            color: var(--color-text);
+            min-height: 100vh;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow-x: hidden;
+        }
+
+        .game-container {
+            width: 100%;
+            max-width: 900px;
+            height: 100vh;
+            background: var(--color-surface);
+            border-radius: 0;
+            box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            position: relative;
+        }
+
+        @media (min-width: 768px) {
+            .game-container {
+                width: 90%;
+                height: 600px;
+                border-radius: 20px;
+            }
+        }
+
+        .scene-container {
+            flex: 1;
+            position: relative;
+            background: linear-gradient(to bottom, #0a1628 0%, #1a1a2e 100%);
+            display: flex;
+            flex-direction: column;
+        }
+
+        .character-display {
+            flex: 1;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            padding: 20px;
+            position: relative;
+            background-size: cover;
+            background-position: center;
+            min-height: 200px;
+        }
+
+        .character {
+            max-height: 400px;
+            max-width: 300px;
+            object-fit: contain;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            animation: fadeIn 0.5s ease-in-out;
+        }
+
+        .character-emoji {
+            font-size: 150px;
+            line-height: 1;
+            filter: drop-shadow(0 10px 20px rgba(0, 0, 0, 0.5));
+            animation: fadeIn 0.5s ease-in-out;
+            text-align: center;
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dialogue-box {
+            background: rgba(22, 33, 62, 0.95);
+            padding: 25px 30px;
+            margin: 20px;
+            border-radius: 15px;
+            border: 2px solid var(--color-primary);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .character-name {
+            color: var(--color-accent);
+            font-size: 20px;
+            font-weight: bold;
+            margin-bottom: 10px;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .dialogue-text {
+            font-size: 18px;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+
+        .choices-container {
+            display: flex;
+            flex-direction: column;
+            gap: 12px;
+        }
+
+        .choice-button {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #d13854 100%);
+            color: white;
+            border: none;
+            padding: 15px 25px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.3);
+            text-align: left;
+        }
+
+        .choice-button:hover {
+            transform: translateX(5px);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
+            background: linear-gradient(135deg, #ff577f 0%, var(--color-primary) 100%);
+        }
+
+        .choice-button:active {
+            transform: translateX(3px);
+        }
+
+        .continue-button {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #1a3a5c 100%);
+            color: white;
+            border: 2px solid var(--color-primary);
+            padding: 12px 30px;
+            border-radius: 10px;
+            font-size: 16px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            align-self: flex-end;
+        }
+
+        .continue-button:hover {
+            background: linear-gradient(135deg, #1a3a5c 0%, var(--color-secondary) 100%);
+            transform: scale(1.05);
+            box-shadow: 0 4px 15px rgba(233, 69, 96, 0.4);
+        }
+
+        .title-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .game-title {
+            font-size: 48px;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-bottom: 20px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+            animation: pulse 2s infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% {
+                transform: scale(1);
+            }
+            50% {
+                transform: scale(1.05);
+            }
+        }
+
+        .subtitle {
+            font-size: 24px;
+            margin-bottom: 40px;
+            opacity: 0.8;
+        }
+
+        .start-button {
+            background: linear-gradient(135deg, var(--color-primary) 0%, #d13854 100%);
+            color: white;
+            border: none;
+            padding: 20px 60px;
+            border-radius: 15px;
+            font-size: 24px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            box-shadow: 0 8px 25px rgba(233, 69, 96, 0.4);
+        }
+
+        .start-button:hover {
+            transform: scale(1.1);
+            box-shadow: 0 12px 35px rgba(233, 69, 96, 0.6);
+        }
+
+        .ending-screen {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100%;
+            text-align: center;
+            padding: 40px;
+        }
+
+        .ending-title {
+            font-size: 36px;
+            font-weight: bold;
+            color: var(--color-accent);
+            margin-bottom: 30px;
+            text-shadow: 0 4px 8px rgba(0, 0, 0, 0.5);
+        }
+
+        .ending-text {
+            font-size: 20px;
+            line-height: 1.8;
+            margin-bottom: 40px;
+            max-width: 600px;
+        }
+
+        .restart-button {
+            background: linear-gradient(135deg, var(--color-secondary) 0%, #1a3a5c 100%);
+            color: white;
+            border: 2px solid var(--color-primary);
+            padding: 15px 40px;
+            border-radius: 10px;
+            font-size: 18px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+        }
+
+        .restart-button:hover {
+            background: linear-gradient(135deg, #1a3a5c 0%, var(--color-secondary) 100%);
+            transform: scale(1.05);
+            box-shadow: 0 6px 20px rgba(233, 69, 96, 0.5);
+        }
+
+        .game-menu {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .character-menu {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 100;
+        }
+
+        .game-btn {
+            background: rgba(22, 33, 62, 0.9);
+            color: var(--color-accent);
+            border: 2px solid var(--color-primary);
+            padding: 10px 15px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 14px;
+            transition: all 0.3s ease;
+        }
+
+        .game-btn:hover {
+            background: var(--color-primary);
+            color: white;
+            transform: scale(1.05);
+        }
+
+        .mini-game-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.8);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 2000;
+        }
+
+        .mini-game-container {
+            background: var(--color-surface);
+            border-radius: 15px;
+            padding: 20px;
+            max-width: 500px;
+            width: 90%;
+        }
+
+        .mini-game-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .mini-game-title {
+            color: var(--color-accent);
+            font-size: 24px;
+            font-weight: bold;
+        }
+
+        .close-game {
+            background: var(--color-primary);
+            color: white;
+            border: none;
+            padding: 8px 15px;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            border: 2px solid var(--color-primary);
+            background: #000;
+            display: block;
+            margin: 0 auto;
+        }
+
+        .game-info {
+            margin-top: 15px;
+            text-align: center;
+            color: var(--color-text);
+            font-size: 18px;
+        }
+    </style>
+</head>
+<body>
+    <div class="character-menu">
+        <button class="game-btn" onclick="showCharacterBio('bibarys')">👦 Бибарыс</button>
+        <button class="game-btn" onclick="showCharacterBio('nargiz')">👧 Наргиз</button>
+    </div>
+
+    <div class="game-menu">
+        <button class="game-btn" onclick="openGame('minesweeper')">💣 Сапёр</button>
+        <button class="game-btn" onclick="openGame('tetris')">🧱 Тетрис</button>
+        <button class="game-btn" onclick="openGame('snake')">🐍 Змейка</button>
+        <button class="game-btn" onclick="openCasino()">🎰 Казино</button>
+    </div>
+
+    <div class="mini-game-overlay" id="miniGameOverlay">
+        <div class="mini-game-container">
+            <div class="mini-game-header">
+                <div class="mini-game-title" id="gameTitle">Игра</div>
+                <button class="close-game" onclick="closeGame()">✕ Закрыть</button>
+            </div>
+            <canvas id="gameCanvas"></canvas>
+            <div class="game-info" id="gameInfo"></div>
+        </div>
+    </div>
+
+    <div class="mini-game-overlay" id="bioOverlay">
+        <div class="mini-game-container">
+            <div class="mini-game-header">
+                <div class="mini-game-title" id="bioTitle">Биография</div>
+                <button class="close-game" onclick="closeBio()">✕ Закрыть</button>
+            </div>
+            <div id="bioContent" style="color: var(--color-text); font-size: 18px; line-height: 1.8; padding: 20px;"></div>
+        </div>
+    </div>
+
+    <div class="mini-game-overlay" id="casinoOverlay">
+        <div class="mini-game-container" style="max-width: 600px;">
+            <div class="mini-game-header">
+                <div class="mini-game-title">🎰 Казино от Давида</div>
+                <button class="close-game" onclick="closeCasino()">✕ Закрыть</button>
+            </div>
+            <div style="text-align: center; padding: 20px;">
+                <div style="background: linear-gradient(135deg, #1a1a2e 0%, #0f3460 100%); padding: 30px; border-radius: 15px; margin-bottom: 20px; border: 3px solid #ffd700;">
+                    <div style="font-size: 18px; color: #ffd700; margin-bottom: 15px;">💰 Ваш баланс: <span id="casinoBalance">1000</span> монет</div>
+                    <div style="font-size: 16px; color: #ff6b9d; margin-bottom: 10px;">🎁 Джекпот: <span id="jackpotAmount">10000</span> монет</div>
+                    <div style="font-size: 14px; color: var(--color-text); opacity: 0.8;">Стоимость крутки: 50 монет</div>
+                </div>
+                
+                <div id="slotMachine" style="display: flex; justify-content: center; gap: 15px; margin: 30px 0; font-size: 80px; min-height: 100px; align-items: center;">
+                    <div id="slot1">🍒</div>
+                    <div id="slot2">🍋</div>
+                    <div id="slot3">🍊</div>
+                </div>
+                
+                <button id="spinButton" onclick="spinSlots()" style="background: linear-gradient(135deg, #ffd700 0%, #ff8c00 100%); color: #000; border: none; padding: 20px 50px; border-radius: 15px; font-size: 24px; font-weight: bold; cursor: pointer; box-shadow: 0 8px 25px rgba(255, 215, 0, 0.4); transition: all 0.3s ease;">
+                    🎰 КРУТИТЬ
+                </button>
+                
+                <div id="casinoResult" style="margin-top: 25px; font-size: 20px; min-height: 30px; font-weight: bold;"></div>
+                
+                <div style="margin-top: 25px; padding: 20px; background: rgba(22, 33, 62, 0.5); border-radius: 10px; text-align: left;">
+                    <div style="color: #ffd700; font-weight: bold; margin-bottom: 10px; text-align: center;">📊 Таблица выплат:</div>
+                    <div style="color: var(--color-text); font-size: 14px; line-height: 2;">
+                        🍒🍒🍒 = 500 монет<br>
+                        🍋🍋🍋 = 300 монет<br>
+                        🍊🍊🍊 = 200 монет<br>
+                        🍇🍇🍇 = 150 монет<br>
+                        🍉🍉🍉 = 100 монет<br>
+                        7️⃣7️⃣7️⃣ = 🎁 ДЖЕКПОТ!<br>
+                        Любые 2 одинаковых = 25 монет
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="game-container">
+        <div class="scene-container" id="sceneContainer"></div>
+    </div>
+
+    <script>
+        const characterImages = {
+            bibarys: '👦',
+            nargiz: '👧',
+            bus: '🚌'
+        };
+
+        const backgrounds = {
+            bus: 'linear-gradient(to bottom, #87ceeb 0%, #e8f4f8 100%)',
+            city: 'linear-gradient(to bottom, #ffd89b 0%, #19547b 100%)',
+            cafe: 'linear-gradient(to bottom, #a8b9ca 0%, #5d4e46 100%)',
+            park: 'linear-gradient(to bottom, #a8edea 0%, #fed6e3 100%)',
+            default: 'linear-gradient(to bottom, #0a1628 0%, #1a1a2e 100%)'
+        };
+
+        const story = {
+            start: {
+                character: '🦁',
+                isEmoji: true,
+                name: '',
+                text: '',
+                showTitle: true,
+                next: 'scene1'
+            },
+            scene1: {
+                character: 'bus',
+                background: 'bus',
+                name: 'Рассказчик',
+                text: 'Межгородской автобус Жезказган - Сатпаев. Ранее утро. Бибарыс садится в автобус и замечает свободное место...',
+                next: 'scene2'
+            },
+            scene2: {
+                character: 'bibarys',
+                background: 'bus',
+                name: 'Бибарыс',
+                text: 'Это место свободно? *смотрит на девушку у окна*',
+                next: 'scene3'
+            },
+            scene3: {
+                character: 'nargiz',
+                background: 'bus',
+                name: 'Наргиз',
+                text: '*поднимает глаза и улыбается* Да, садитесь! Меня зовут Наргиз.',
+                next: 'scene4'
+            },
+            scene4: {
+                character: 'bibarys',
+                background: 'bus',
+                name: 'Бибарыс',
+                text: '*чувствует необычное волнение* Приятно познакомиться! Я Бибарыс. Тоже едешь в Сатпаев?',
+                next: 'scene5'
+            },
+            scene5: {
+                character: 'nargiz',
+                background: 'bus',
+                name: 'Наргиз',
+                text: '*смотрит в окно на проплывающие пейзажи Жезказгана* Да, навестить родственников. А ты?',
+                choices: [
+                    { text: 'У меня там учёба', next: 'study' },
+                    { text: 'Еду по работе', next: 'work' },
+                    { text: 'Просто захотелось съездить', next: 'travel' }
+                ]
+            },
+            study: {
+                character: 'bibarys',
+                background: 'bus',
+                name: 'Бибарыс',
+                text: 'Учусь в техническом колледже. Интересно, но иногда тяжело.',
+                next: 'scene6'
+            },
+            work: {
+                character: 'bibarys',
+                background: 'bus',
+                name: 'Бибарыс',
+                text: 'По работе еду. Нужно встретиться с партнёрами.',
+                next: 'scene6'
+            },
+            travel: {
+                character: 'bibarys',
+                background: 'bus',
+                name: 'Бибарыс',
+                text: 'Просто захотелось сменить обстановку. Жезказган - родной, но иногда нужно отвлечься.',
+                next: 'scene6'
+            },
+            scene6: {
+                character: 'nargiz',
+                background: 'bus',
+                name: 'Наргиз',
+                text: '*искренне заинтересована* Понимаю тебя. Знаешь, с тобой так легко разговаривать... Редко встречаешь таких людей.',
+                next: 'scene7'
+            },
+            scene7: {
+                character: 'bus',
+                background: 'city',
+                name: 'Рассказчик',
+                text: 'Дорога пролетает незаметно. Вы обмениваетесь историями, смеётесь, и чувствуете особую связь. Автобус приближается к Сатпаеву...',
+                next: 'scene8'
+            },
+            scene8: {
+                character: 'bibarys',
+                background: 'city',
+                name: 'Бибарыс',
+                text: '*немного волнуется* Наргиз, мне было очень приятно с тобой познакомиться. Может быть... встретимся ещё?',
+                choices: [
+                    { text: 'Пойдём погуляем по центру Сатпаева', next: 'park' },
+                    { text: 'Может, зайдём в кафе на вокзале?', next: 'cafe' },
+                    { text: 'Давай обменяемся контактами и созвонимся', next: 'contacts' }
+                ]
+            },
+            contacts: {
+                character: 'nargiz',
+                background: 'city',
+                name: 'Наргиз',
+                text: '*достаёт телефон* Отличная идея! Вот мой номер. Обязательно напиши!',
+                next: 'home'
+            },
+            park: {
+                character: 'bibarys',
+                background: 'park',
+                name: 'Бибарыс',
+                text: 'Отличная идея! Центр Сатпаева такой уютный. Пойдём?',
+                next: 'park2'
+            },
+            park2: {
+                character: 'nargiz',
+                background: 'park',
+                name: 'Наргиз',
+                text: 'Смотри, какие красивые цветы! Спасибо, что привёл меня сюда.',
+                choices: [
+                    { text: 'Сорвать цветок для Наргиз', next: 'flower' },
+                    { text: 'Предложить сесть на скамейку', next: 'bench' }
+                ]
+            },
+            flower: {
+                character: 'nargiz',
+                background: 'park',
+                name: 'Наргиз',
+                text: 'О, какой красивый! Ты очень внимательный, Бибарыс. *краснеет*',
+                next: 'ending_romance'
+            },
+            bench: {
+                character: 'bibarys',
+                background: 'park',
+                name: 'Бибарыс',
+                text: 'Давай посидим и насладимся этим моментом.',
+                next: 'bench2'
+            },
+            bench2: {
+                character: 'nargiz',
+                background: 'park',
+                name: 'Наргиз',
+                text: 'С тобой так хорошо... Кажется, я влюбляюсь в тебя.',
+                next: 'ending_romance'
+            },
+            cafe: {
+                character: 'nargiz',
+                background: 'cafe',
+                name: 'Наргиз',
+                text: 'На вокзале есть уютное кафе! Я замёрзла в автобусе. Что будешь заказывать?',
+                next: 'cafe2'
+            },
+            cafe2: {
+                character: 'bibarys',
+                background: 'cafe',
+                name: 'Бибарыс',
+                text: 'Возьму капучино. А ты?',
+                choices: [
+                    { text: 'Латте с карамелью', next: 'latte' },
+                    { text: 'Горячий шоколад', next: 'chocolate' }
+                ]
+            },
+            latte: {
+                character: 'nargiz',
+                background: 'cafe',
+                name: 'Наргиз',
+                text: 'У нас похожий вкус! Это знак судьбы? *смеётся*',
+                next: 'ending_friendship'
+            },
+            chocolate: {
+                character: 'nargiz',
+                background: 'cafe',
+                name: 'Наргиз',
+                text: 'Ммм, горячий шоколад - моя слабость! Хочешь попробовать?',
+                next: 'ending_friendship'
+            },
+            home: {
+                character: '📱',
+                isEmoji: true,
+                background: 'city',
+                name: 'Рассказчик',
+                text: 'Прошло несколько дней. Бибарыс и Наргиз постоянно переписываются. Наконец, Наргиз вернулась в Жезказган...',
+                next: 'home2'
+            },
+            home2: {
+                character: 'bibarys',
+                background: 'city',
+                name: 'Бибарыс',
+                text: '*звонит Наргиз* Привет! Ты уже вернулась? Давай встретимся! Может, сходим куда-нибудь?',
+                next: 'home3'
+            },
+            home3: {
+                character: 'nargiz',
+                background: 'city',
+                name: 'Наргиз',
+                text: 'Конечно! Я скучала по нашим разговорам. Может быть, что-то романтичное?',
+                choices: [
+                    { text: 'Сходим в кино на романтическую комедию', next: 'movie_romance' },
+                    { text: 'Давай просто погуляем по Жезказгану', next: 'movie_anime' }
+                ]
+            },
+            movie_romance: {
+                character: 'nargiz',
+                background: 'default',
+                name: 'Наргиз',
+                text: '*прижимается к плечу Бибарыса* Какой трогательный момент...',
+                next: 'ending_romance'
+            },
+            movie_anime: {
+                character: 'bibarys',
+                background: 'default',
+                name: 'Бибарыс',
+                text: 'Отличный выбор! Я знал, что ты поймёшь мою любовь к аниме.',
+                next: 'ending_friends_forever'
+            },
+            ending_romance: {
+                character: '❤️',
+                isEmoji: true,
+                background: 'park',
+                name: '',
+                text: '',
+                ending: {
+                    title: 'Романтический финал',
+                    text: 'Бибарыс и Наргиз поняли, что между ними есть что-то особенное. Их дружба переросла в нечто большее, и теперь они готовы идти по жизни вместе, рука об руку.'
+                }
+            },
+            ending_friendship: {
+                character: '🤝',
+                isEmoji: true,
+                background: 'cafe',
+                name: '',
+                text: '',
+                ending: {
+                    title: 'Крепкая дружба',
+                    text: 'Бибарыс и Наргиз стали лучшими друзьями. Они поняли, что их связывает глубокая дружба и взаимопонимание. Впереди их ждёт множество приключений!'
+                }
+            },
+            ending_friends_forever: {
+                character: '⭐',
+                isEmoji: true,
+                background: 'city',
+                name: '',
+                text: '',
+                ending: {
+                    title: 'Друзья навсегда',
+                    text: 'Общие интересы и любовь к аниме сделали Бибарыса и Наргиз неразлучными друзьями. Они создали свой собственный клуб аниме и проводят вместе каждые выходные!'
+                }
+            }
+        };
+
+        let currentScene = 'start';
+
+        function showScene(sceneId) {
+            const scene = story[sceneId];
+            const container = document.getElementById('sceneContainer');
+            
+            if (scene.showTitle) {
+                container.innerHTML = `
+                    <div class="title-screen">
+                        <div class="game-title">Бибарыс и Наргиз</div>
+                        <div class="subtitle">История любви в дороге Жезказган - Сатпаев</div>
+                        <button class="start-button" onclick="startGame()">Начать игру</button>
+                    </div>
+                `;
+                return;
+            }
+
+            if (scene.ending) {
+                container.innerHTML = `
+                    <div class="ending-screen">
+                        <div class="ending-title">${scene.ending.title}</div>
+                        <div class="ending-text">${scene.ending.text}</div>
+                        <button class="restart-button" onclick="restartGame()">Начать заново</button>
+                    </div>
+                `;
+                return;
+            }
+
+            const bg = scene.background ? backgrounds[scene.background] : backgrounds.default;
+            
+            let characterHtml = '';
+            if (scene.isEmoji) {
+                characterHtml = `<div class="character-emoji">${scene.character}</div>`;
+            } else if (characterImages[scene.character]) {
+                characterHtml = `<div class="character-emoji">${characterImages[scene.character]}</div>`;
+            } else {
+                characterHtml = `<div class="character-emoji">${scene.character}</div>`;
+            }
+            
+            let html = `
+                <div class="character-display" style="background: ${bg}">
+                    ${characterHtml}
+                </div>
+                <div class="dialogue-box">
+                    ${scene.name ? `<div class="character-name">${scene.name}</div>` : ''}
+                    <div class="dialogue-text">${scene.text}</div>
+            `;
+
+            if (scene.choices) {
+                html += '<div class="choices-container">';
+                scene.choices.forEach((choice, index) => {
+                    html += `<button class="choice-button" onclick="makeChoice('${choice.next}')">${choice.text}</button>`;
+                });
+                html += '</div>';
+            } else if (scene.next) {
+                html += `<button class="continue-button" onclick="continueStory('${scene.next}')">Продолжить ▶</button>`;
+            }
+
+            html += '</div>';
+            container.innerHTML = html;
+        }
+
+        function startGame() {
+            currentScene = 'scene1';
+            showScene(currentScene);
+        }
+
+        function continueStory(nextScene) {
+            currentScene = nextScene;
+            showScene(currentScene);
+        }
+
+        function makeChoice(nextScene) {
+            currentScene = nextScene;
+            showScene(currentScene);
+        }
+
+        function restartGame() {
+            currentScene = 'start';
+            showScene(currentScene);
+        }
+
+        // Инициализация игры
+        showScene(currentScene);
+
+        // Мини-игры
+        let currentGame = null;
+        let gameInterval = null;
+
+        function openGame(gameName) {
+            const overlay = document.getElementById('miniGameOverlay');
+            const canvas = document.getElementById('gameCanvas');
+            const title = document.getElementById('gameTitle');
+            
+            overlay.style.display = 'flex';
+            currentGame = gameName;
+            
+            if (gameName === 'minesweeper') {
+                title.textContent = '💣 Сапёр';
+                startMinesweeper(canvas);
+            } else if (gameName === 'tetris') {
+                title.textContent = '🧱 Тетрис';
+                startTetris(canvas);
+            } else if (gameName === 'snake') {
+                title.textContent = '🐍 Змейка';
+                startSnake(canvas);
+            }
+        }
+
+        function closeGame() {
+            document.getElementById('miniGameOverlay').style.display = 'none';
+            if (gameInterval) clearInterval(gameInterval);
+            currentGame = null;
+        }
+
+        // САПЁР
+        function startMinesweeper(canvas) {
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            const size = 10;
+            const cellSize = 40;
+            const mines = 15;
+            
+            let grid = [];
+            let revealed = [];
+            let gameOver = false;
+            
+            function initGrid() {
+                grid = Array(size).fill().map(() => Array(size).fill(0));
+                revealed = Array(size).fill().map(() => Array(size).fill(false));
+                
+                let mineCount = 0;
+                while (mineCount < mines) {
+                    const x = Math.floor(Math.random() * size);
+                    const y = Math.floor(Math.random() * size);
+                    if (grid[y][x] !== -1) {
+                        grid[y][x] = -1;
+                        mineCount++;
+                    }
+                }
+                
+                for (let y = 0; y < size; y++) {
+                    for (let x = 0; x < size; x++) {
+                        if (grid[y][x] !== -1) {
+                            let count = 0;
+                            for (let dy = -1; dy <= 1; dy++) {
+                                for (let dx = -1; dx <= 1; dx++) {
+                                    const ny = y + dy;
+                                    const nx = x + dx;
+                                    if (ny >= 0 && ny < size && nx >= 0 && nx < size && grid[ny][nx] === -1) {
+                                        count++;
+                                    }
+                                }
+                            }
+                            grid[y][x] = count;
+                        }
+                    }
+                }
+            }
+            
+            function draw() {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                for (let y = 0; y < size; y++) {
+                    for (let x = 0; x < size; x++) {
+                        const px = x * cellSize;
+                        const py = y * cellSize;
+                        
+                        if (revealed[y][x]) {
+                            ctx.fillStyle = grid[y][x] === -1 ? '#ff0000' : '#cccccc';
+                            ctx.fillRect(px, py, cellSize - 2, cellSize - 2);
+                            
+                            if (grid[y][x] > 0) {
+                                ctx.fillStyle = '#000';
+                                ctx.font = '20px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText(grid[y][x], px + cellSize/2, py + cellSize/2 + 7);
+                            } else if (grid[y][x] === -1) {
+                                ctx.fillStyle = '#000';
+                                ctx.font = '20px Arial';
+                                ctx.textAlign = 'center';
+                                ctx.fillText('💣', px + cellSize/2, py + cellSize/2 + 7);
+                            }
+                        } else {
+                            ctx.fillStyle = '#666';
+                            ctx.fillRect(px, py, cellSize - 2, cellSize - 2);
+                        }
+                    }
+                }
+            }
+            
+            function reveal(x, y) {
+                if (x < 0 || x >= size || y < 0 || y >= size || revealed[y][x]) return;
+                
+                revealed[y][x] = true;
+                
+                if (grid[y][x] === -1) {
+                    gameOver = true;
+                    document.getElementById('gameInfo').textContent = '💥 Взрыв! Игра окончена!';
+                    for (let i = 0; i < size; i++) {
+                        for (let j = 0; j < size; j++) {
+                            revealed[i][j] = true;
+                        }
+                    }
+                    draw();
+                    return;
+                }
+                
+                if (grid[y][x] === 0) {
+                    for (let dy = -1; dy <= 1; dy++) {
+                        for (let dx = -1; dx <= 1; dx++) {
+                            reveal(x + dx, y + dy);
+                        }
+                    }
+                }
+                draw();
+            }
+            
+            canvas.onclick = (e) => {
+                if (gameOver) return;
+                const rect = canvas.getBoundingClientRect();
+                const x = Math.floor((e.clientX - rect.left) / cellSize);
+                const y = Math.floor((e.clientY - rect.top) / cellSize);
+                reveal(x, y);
+            };
+            
+            initGrid();
+            draw();
+            document.getElementById('gameInfo').textContent = '💣 Найдите все мины!';
+        }
+
+        // ТЕТРИС
+        function startTetris(canvas) {
+            canvas.width = 300;
+            canvas.height = 600;
+            const ctx = canvas.getContext('2d');
+            const ROWS = 20;
+            const COLS = 10;
+            const BLOCK_SIZE = 30;
+            
+            let board = Array(ROWS).fill().map(() => Array(COLS).fill(0));
+            let score = 0;
+            let piece = null;
+            let gameOver = false;
+            
+            const shapes = [
+                [[1,1,1,1]], // I
+                [[1,1],[1,1]], // O
+                [[1,1,1],[0,1,0]], // T
+                [[1,1,1],[1,0,0]], // L
+                [[1,1,1],[0,0,1]], // J
+                [[1,1,0],[0,1,1]], // S
+                [[0,1,1],[1,1,0]]  // Z
+            ];
+            
+            const colors = ['#00ffff', '#ffff00', '#ff00ff', '#ff8800', '#0000ff', '#00ff00', '#ff0000'];
+            
+            function newPiece() {
+                const shapeIndex = Math.floor(Math.random() * shapes.length);
+                return {
+                    shape: shapes[shapeIndex],
+                    color: colors[shapeIndex],
+                    x: Math.floor(COLS / 2) - 1,
+                    y: 0
+                };
+            }
+            
+            function draw() {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Рисуем доску
+                for (let y = 0; y < ROWS; y++) {
+                    for (let x = 0; x < COLS; x++) {
+                        if (board[y][x]) {
+                            ctx.fillStyle = board[y][x];
+                            ctx.fillRect(x * BLOCK_SIZE, y * BLOCK_SIZE, BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+                        }
+                    }
+                }
+                
+                // Рисуем текущую фигуру
+                if (piece) {
+                    ctx.fillStyle = piece.color;
+                    piece.shape.forEach((row, dy) => {
+                        row.forEach((value, dx) => {
+                            if (value) {
+                                ctx.fillRect((piece.x + dx) * BLOCK_SIZE, (piece.y + dy) * BLOCK_SIZE, 
+                                           BLOCK_SIZE - 1, BLOCK_SIZE - 1);
+                            }
+                        });
+                    });
+                }
+            }
+            
+            function collision() {
+                return piece.shape.some((row, dy) => 
+                    row.some((value, dx) => {
+                        if (!value) return false;
+                        const newX = piece.x + dx;
+                        const newY = piece.y + dy;
+                        return newX < 0 || newX >= COLS || newY >= ROWS || (newY >= 0 && board[newY][newX]);
+                    })
+                );
+            }
+            
+            function merge() {
+                piece.shape.forEach((row, dy) => {
+                    row.forEach((value, dx) => {
+                        if (value) {
+                            board[piece.y + dy][piece.x + dx] = piece.color;
+                        }
+                    });
+                });
+            }
+            
+            function clearLines() {
+                for (let y = ROWS - 1; y >= 0; y--) {
+                    if (board[y].every(cell => cell)) {
+                        board.splice(y, 1);
+                        board.unshift(Array(COLS).fill(0));
+                        score += 100;
+                        y++;
+                    }
+                }
+            }
+            
+            function moveDown() {
+                piece.y++;
+                if (collision()) {
+                    piece.y--;
+                    merge();
+                    clearLines();
+                    piece = newPiece();
+                    if (collision()) {
+                        gameOver = true;
+                        document.getElementById('gameInfo').textContent = `Игра окончена! Счёт: ${score}`;
+                        clearInterval(gameInterval);
+                    }
+                }
+                draw();
+                document.getElementById('gameInfo').textContent = `Счёт: ${score}`;
+            }
+            
+            document.onkeydown = (e) => {
+                if (gameOver || !piece) return;
+                
+                if (e.key === 'ArrowLeft') {
+                    piece.x--;
+                    if (collision()) piece.x++;
+                } else if (e.key === 'ArrowRight') {
+                    piece.x++;
+                    if (collision()) piece.x--;
+                } else if (e.key === 'ArrowDown') {
+                    moveDown();
+                } else if (e.key === 'ArrowUp') {
+                    const rotated = piece.shape[0].map((_, i) => piece.shape.map(row => row[i]).reverse());
+                    const oldShape = piece.shape;
+                    piece.shape = rotated;
+                    if (collision()) piece.shape = oldShape;
+                }
+                draw();
+            };
+            
+            piece = newPiece();
+            draw();
+            gameInterval = setInterval(moveDown, 500);
+            document.getElementById('gameInfo').textContent = 'Используйте стрелки для управления';
+        }
+
+        // ЗМЕЙКА
+        function startSnake(canvas) {
+            canvas.width = 400;
+            canvas.height = 400;
+            const ctx = canvas.getContext('2d');
+            const gridSize = 20;
+            const cellSize = canvas.width / gridSize;
+            
+            let snake = [{x: 10, y: 10}];
+            let direction = {x: 1, y: 0};
+            let food = {x: 15, y: 15};
+            let score = 0;
+            let gameOver = false;
+            
+            function draw() {
+                ctx.fillStyle = '#000';
+                ctx.fillRect(0, 0, canvas.width, canvas.height);
+                
+                // Рисуем змейку
+                ctx.fillStyle = '#00ff00';
+                snake.forEach(segment => {
+                    ctx.fillRect(segment.x * cellSize, segment.y * cellSize, cellSize - 2, cellSize - 2);
+                });
+                
+                // Рисуем еду
+                ctx.fillStyle = '#ff0000';
+                ctx.fillRect(food.x * cellSize, food.y * cellSize, cellSize - 2, cellSize - 2);
+            }
+            
+            function update() {
+                if (gameOver) return;
+                
+                const head = {x: snake[0].x + direction.x, y: snake[0].y + direction.y};
+                
+                // Проверка столкновения со стенами
+                if (head.x < 0 || head.x >= gridSize || head.y < 0 || head.y >= gridSize) {
+                    gameOver = true;
+                    document.getElementById('gameInfo').textContent = `Игра окончена! Счёт: ${score}`;
+                    clearInterval(gameInterval);
+                    return;
+                }
+                
+                // Проверка столкновения с собой
+                if (snake.some(segment => segment.x === head.x && segment.y === head.y)) {
+                    gameOver = true;
+                    document.getElementById('gameInfo').textContent = `Игра окончена! Счёт: ${score}`;
+                    clearInterval(gameInterval);
+                    return;
+                }
+                
+                snake.unshift(head);
+                
+                // Проверка поедания еды
+                if (head.x === food.x && head.y === food.y) {
+                    score += 10;
+                    food = {
+                        x: Math.floor(Math.random() * gridSize),
+                        y: Math.floor(Math.random() * gridSize)
+                    };
+                    document.getElementById('gameInfo').textContent = `Счёт: ${score}`;
+                } else {
+                    snake.pop();
+                }
+                
+                draw();
+            }
+            
+            document.onkeydown = (e) => {
+                if (gameOver) return;
+                
+                if (e.key === 'ArrowUp' && direction.y === 0) {
+                    direction = {x: 0, y: -1};
+                } else if (e.key === 'ArrowDown' && direction.y === 0) {
+                    direction = {x: 0, y: 1};
+                } else if (e.key === 'ArrowLeft' && direction.x === 0) {
+                    direction = {x: -1, y: 0};
+                } else if (e.key === 'ArrowRight' && direction.x === 0) {
+                    direction = {x: 1, y: 0};
+                }
+            };
+            
+            draw();
+            gameInterval = setInterval(update, 150);
+            document.getElementById('gameInfo').textContent = 'Используйте стрелки для управления';
+        }
+
+        // Биографии персонажей
+        const characterBios = {
+            bibarys: {
+                emoji: '👦',
+                name: 'Бибарыс',
+                bio: `<div style="text-align: center; font-size: 100px; margin-bottom: 20px;">👦</div>
+                      <h3 style="color: var(--color-accent); margin-bottom: 15px;">Бибарыс</h3>
+                      <p><strong>Возраст:</strong> 17 лет</p>
+                      <p><strong>Родной город:</strong> Жезказган, Казахстан</p>
+                      <p><strong>Характер:</strong> Добрый, отзывчивый и немного застенчивый молодой человек. Любит знакомиться с новыми людьми и ценит искренность.</p>
+                      <p><strong>Увлечения:</strong> Учёба в техническом колледже, путешествия по Казахстану, чтение книг.</p>
+                      <p><strong>Мечта:</strong> Найти настоящую любовь и построить крепкую семью.</p>
+                      <p><strong>Особенность:</strong> Бибарыс верит в судьбу и знаки свыше. Та самая поездка в Сатпаев изменила его жизнь навсегда.</p>`
+            },
+            nargiz: {
+                emoji: '👧',
+                name: 'Наргиз',
+                bio: `<div style="text-align: center; font-size: 100px; margin-bottom: 20px;">👧</div>
+                      <h3 style="color: var(--color-accent); margin-bottom: 15px;">Наргиз</h3>
+                      <p><strong>Возраст:</strong> 16 лет</p>
+                      <p><strong>Родной город:</strong> Жезказган, Казахстан</p>
+                      <p><strong>Характер:</strong> Открытая, жизнерадостная и романтичная девушка. Легко находит общий язык с людьми и ценит искренние отношения.</p>
+                      <p><strong>Увлечения:</strong> Аниме, рисование, прогулки по городу, романтические комедии.</p>
+                      <p><strong>Мечта:</strong> Встретить человека, который поймёт её без слов и разделит её интересы.</p>
+                      <p><strong>Особенность:</strong> Наргиз верит в любовь с первого взгляда. Встреча с Бибарысом в автобусе стала для неё началом прекрасной истории.</p>`
+            }
+        };
+
+        function showCharacterBio(character) {
+            const overlay = document.getElementById('bioOverlay');
+            const content = document.getElementById('bioContent');
+            const title = document.getElementById('bioTitle');
+            
+            const bio = characterBios[character];
+            title.textContent = `Биография: ${bio.name}`;
+            content.innerHTML = bio.bio;
+            
+            overlay.style.display = 'flex';
+        }
+
+        function closeBio() {
+            document.getElementById('bioOverlay').style.display = 'none';
+        }
+
+        // Казино
+        let casinoBalance = 1000;
+        let jackpot = 10000;
+        let isSpinning = false;
+
+        const slotSymbols = ['🍒', '🍋', '🍊', '🍇', '🍉', '7️⃣'];
+
+        function openCasino() {
+            document.getElementById('casinoOverlay').style.display = 'flex';
+            updateCasinoDisplay();
+        }
+
+        function closeCasino() {
+            document.getElementById('casinoOverlay').style.display = 'none';
+        }
+
+        function updateCasinoDisplay() {
+            document.getElementById('casinoBalance').textContent = casinoBalance;
+            document.getElementById('jackpotAmount').textContent = jackpot;
+        }
+
+        function spinSlots() {
+            if (isSpinning) return;
+            
+            if (casinoBalance < 50) {
+                document.getElementById('casinoResult').innerHTML = '<span style="color: #ff0000;">❌ Недостаточно монет!</span>';
+                return;
+            }
+
+            isSpinning = true;
+            casinoBalance -= 50;
+            jackpot += 10;
+            updateCasinoDisplay();
+            
+            const spinButton = document.getElementById('spinButton');
+            spinButton.style.opacity = '0.5';
+            spinButton.style.cursor = 'not-allowed';
+            
+            document.getElementById('casinoResult').textContent = '';
+            
+            let spinCount = 0;
+            const spinInterval = setInterval(() => {
+                document.getElementById('slot1').textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                document.getElementById('slot2').textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                document.getElementById('slot3').textContent = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+                
+                spinCount++;
+                if (spinCount >= 20) {
+                    clearInterval(spinInterval);
+                    finalizeSpin();
+                }
+            }, 100);
+        }
+
+        function finalizeSpin() {
+            const slot1 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const slot2 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            const slot3 = slotSymbols[Math.floor(Math.random() * slotSymbols.length)];
+            
+            document.getElementById('slot1').textContent = slot1;
+            document.getElementById('slot2').textContent = slot2;
+            document.getElementById('slot3').textContent = slot3;
+            
+            let winAmount = 0;
+            let resultText = '';
+            
+            if (slot1 === '7️⃣' && slot2 === '7️⃣' && slot3 === '7️⃣') {
+                winAmount = jackpot;
+                resultText = `<span style="color: #ffd700; font-size: 28px;">🎉 ДЖЕКПОТ! +${winAmount} монет! 🎉</span>`;
+                jackpot = 10000;
+            } else if (slot1 === slot2 && slot2 === slot3) {
+                if (slot1 === '🍒') winAmount = 500;
+                else if (slot1 === '🍋') winAmount = 300;
+                else if (slot1 === '🍊') winAmount = 200;
+                else if (slot1 === '🍇') winAmount = 150;
+                else if (slot1 === '🍉') winAmount = 100;
+                resultText = `<span style="color: #00ff00;">✨ Три одинаковых! +${winAmount} монет!</span>`;
+            } else if (slot1 === slot2 || slot2 === slot3 || slot1 === slot3) {
+                winAmount = 25;
+                resultText = `<span style="color: #ffff00;">⭐ Два одинаковых! +${winAmount} монет</span>`;
+            } else {
+                resultText = '<span style="color: #ff6b9d;">💔 Повезёт в следующий раз!</span>';
+            }
+            
+            casinoBalance += winAmount;
+            updateCasinoDisplay();
+            
+            document.getElementById('casinoResult').innerHTML = resultText;
+            
+            const spinButton = document.getElementById('spinButton');
+            spinButton.style.opacity = '1';
+            spinButton.style.cursor = 'pointer';
+            isSpinning = false;
+        }
+    </script>
+</body>
+</html>
+

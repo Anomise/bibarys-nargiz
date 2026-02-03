@@ -1,22 +1,1911 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="ru">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
-    <meta name="theme-color" content="#1e1b4b" />
-    <meta name="description" content="Визуальная новелла о любви между Сатпаевом и Жезказганом" />
-    <title>Маршрут 101 - Визуальная Новелла</title>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Сердце Сатпаева - Визуальная Новелла</title>
+    <link href="https://fonts.googleapis.com/css2?family=Nunito:wght@400;600;700&family=Caveat:wght@700&display=swap" rel="stylesheet">
     <style>
-      * {
-        -webkit-tap-highlight-color: transparent;
-      }
-      body {
-        overscroll-behavior: none;
-      }
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Nunito', sans-serif;
+            background: #0a0a0f;
+            color: #fff;
+            overflow: hidden;
+            height: 100vh;
+            width: 100vw;
+        }
+
+        /* Platform Selection */
+        #platform-select {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            z-index: 1000;
+        }
+
+        .platform-title {
+            font-family: 'Caveat', cursive;
+            font-size: 4rem;
+            color: #ff6b9d;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.5);
+            margin-bottom: 20px;
+            animation: glow 2s ease-in-out infinite alternate;
+        }
+
+        @keyframes glow {
+            from { text-shadow: 0 0 30px rgba(255, 107, 157, 0.5); }
+            to { text-shadow: 0 0 50px rgba(255, 107, 157, 0.8), 0 0 80px rgba(255, 107, 157, 0.4); }
+        }
+
+        .platform-subtitle {
+            font-size: 1.2rem;
+            color: #a0a0a0;
+            margin-bottom: 50px;
+        }
+
+        .platform-buttons {
+            display: flex;
+            gap: 40px;
+            flex-wrap: wrap;
+            justify-content: center;
+        }
+
+        .platform-btn {
+            width: 200px;
+            height: 250px;
+            background: rgba(255, 255, 255, 0.05);
+            border: 2px solid rgba(255, 107, 157, 0.3);
+            border-radius: 20px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            gap: 20px;
+        }
+
+        .platform-btn:hover {
+            background: rgba(255, 107, 157, 0.1);
+            border-color: #ff6b9d;
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(255, 107, 157, 0.2);
+        }
+
+        .platform-icon {
+            font-size: 80px;
+        }
+
+        .platform-label {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        /* Main Game Container */
+        #game-container {
+            display: none;
+            width: 100%;
+            height: 100%;
+            position: relative;
+            overflow: hidden;
+        }
+
+        /* Backgrounds */
+        .background {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-size: cover;
+            background-position: center;
+            transition: opacity 0.5s ease;
+        }
+
+        .bg-bus-stop {
+            background: linear-gradient(to bottom, #87CEEB 0%, #E0F6FF 100%);
+        }
+
+        .bg-bus-stop::before {
+            content: '';
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            height: 30%;
+            background: linear-gradient(to top, #555 0%, #777 100%);
+        }
+
+        .bg-bus {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+
+        .bg-college {
+            background: linear-gradient(to bottom, #74b9ff 0%, #a29bfe 100%);
+        }
+
+        .bg-evening {
+            background: linear-gradient(to bottom, #2c3e50 0%, #fd79a8 30%, #e17055 60%, #2d3436 100%);
+        }
+
+        .bg-night {
+            background: linear-gradient(to bottom, #0c0c1e 0%, #1a1a3e 50%, #2d2d5a 100%);
+        }
+
+        .bg-park {
+            background: linear-gradient(to bottom, #55efc4 0%, #00b894 100%);
+        }
+
+        .bg-cafe {
+            background: linear-gradient(135deg, #fdcb6e 0%, #e17055 100%);
+        }
+
+        .bg-rain {
+            background: linear-gradient(to bottom, #636e72 0%, #2d3436 100%);
+        }
+
+        /* Character Display */
+        #character-display {
+            position: absolute;
+            bottom: 25%;
+            left: 50%;
+            transform: translateX(-50%);
+            display: flex;
+            justify-content: center;
+            align-items: flex-end;
+            gap: 50px;
+            z-index: 10;
+        }
+
+        .character {
+            text-align: center;
+            transition: all 0.3s ease;
+        }
+
+        .character-sprite {
+            width: 200px;
+            height: 350px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: flex-end;
+        }
+
+        .character-avatar {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            border: 4px solid #fff;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.3);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 60px;
+            margin-bottom: 10px;
+        }
+
+        .nargiza-avatar {
+            background: linear-gradient(135deg, #ff6b9d, #c44569);
+        }
+
+        .arif-avatar {
+            background: linear-gradient(135deg, #74b9ff, #0984e3);
+        }
+
+        .character-name-tag {
+            background: rgba(0, 0, 0, 0.7);
+            padding: 5px 15px;
+            border-radius: 15px;
+            font-size: 0.9rem;
+        }
+
+        /* Dialog Box */
+        #dialog-box {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(to top, rgba(0, 0, 0, 0.95), rgba(0, 0, 0, 0.85));
+            border-top: 3px solid #ff6b9d;
+            padding: 20px;
+            min-height: 25%;
+            z-index: 20;
+        }
+
+        #speaker-name {
+            font-size: 1.3rem;
+            font-weight: 700;
+            color: #ff6b9d;
+            margin-bottom: 10px;
+            display: inline-block;
+            background: rgba(255, 107, 157, 0.2);
+            padding: 5px 20px;
+            border-radius: 20px;
+        }
+
+        #dialog-text {
+            font-size: 1.1rem;
+            line-height: 1.8;
+            color: #fff;
+            min-height: 80px;
+        }
+
+        #continue-hint {
+            position: absolute;
+            bottom: 15px;
+            right: 20px;
+            color: #888;
+            font-size: 0.9rem;
+            animation: blink 1s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0.3; }
+        }
+
+        /* Choices */
+        #choices-container {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            display: none;
+            flex-direction: column;
+            gap: 15px;
+            z-index: 30;
+            width: 90%;
+            max-width: 600px;
+        }
+
+        .choice-btn {
+            background: linear-gradient(135deg, rgba(255, 107, 157, 0.9), rgba(196, 69, 105, 0.9));
+            border: none;
+            padding: 20px 30px;
+            font-size: 1.1rem;
+            color: #fff;
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            font-family: 'Nunito', sans-serif;
+            font-weight: 600;
+            text-align: left;
+            box-shadow: 0 5px 20px rgba(255, 107, 157, 0.3);
+        }
+
+        .choice-btn:hover {
+            transform: translateX(10px);
+            box-shadow: 0 10px 30px rgba(255, 107, 157, 0.5);
+            background: linear-gradient(135deg, rgba(255, 127, 177, 0.95), rgba(216, 89, 125, 0.95));
+        }
+
+        .choice-btn::before {
+            content: '▸ ';
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+
+        .choice-btn:hover::before {
+            opacity: 1;
+        }
+
+        /* UI Elements */
+        #game-ui {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            display: flex;
+            gap: 10px;
+            z-index: 50;
+        }
+
+        .ui-btn {
+            width: 50px;
+            height: 50px;
+            background: rgba(0, 0, 0, 0.7);
+            border: 2px solid rgba(255, 255, 255, 0.3);
+            border-radius: 50%;
+            color: #fff;
+            font-size: 1.3rem;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ui-btn:hover {
+            background: rgba(255, 107, 157, 0.7);
+            border-color: #ff6b9d;
+            transform: scale(1.1);
+        }
+
+        /* Affection Meter */
+        #affection-container {
+            position: absolute;
+            top: 20px;
+            left: 20px;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 15px 20px;
+            border-radius: 15px;
+            z-index: 50;
+            border: 2px solid rgba(255, 107, 157, 0.3);
+        }
+
+        #affection-label {
+            font-size: 0.9rem;
+            color: #ff6b9d;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        #affection-bar {
+            width: 150px;
+            height: 12px;
+            background: rgba(255, 255, 255, 0.2);
+            border-radius: 10px;
+            overflow: hidden;
+        }
+
+        #affection-fill {
+            height: 100%;
+            background: linear-gradient(90deg, #ff6b9d, #ff8fab);
+            width: 30%;
+            transition: width 0.5s ease;
+            border-radius: 10px;
+        }
+
+        /* Chapter Title */
+        #chapter-title {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            font-family: 'Caveat', cursive;
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(255, 107, 157, 0.8);
+            opacity: 0;
+            z-index: 100;
+            text-align: center;
+            pointer-events: none;
+        }
+
+        /* Menu */
+        #menu-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.9);
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 200;
+        }
+
+        .menu-content {
+            text-align: center;
+        }
+
+        .menu-title {
+            font-family: 'Caveat', cursive;
+            font-size: 3rem;
+            color: #ff6b9d;
+            margin-bottom: 40px;
+        }
+
+        .menu-btn {
+            display: block;
+            width: 250px;
+            margin: 15px auto;
+            padding: 15px 30px;
+            background: transparent;
+            border: 2px solid #ff6b9d;
+            color: #fff;
+            font-size: 1.2rem;
+            font-family: 'Nunito', sans-serif;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            border-radius: 30px;
+        }
+
+        .menu-btn:hover {
+            background: #ff6b9d;
+            transform: scale(1.05);
+        }
+
+        /* Ending Screen */
+        #ending-screen {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            display: none;
+            justify-content: center;
+            align-items: center;
+            z-index: 300;
+            flex-direction: column;
+        }
+
+        .ending-good {
+            background: linear-gradient(135deg, #ff6b9d 0%, #c44569 50%, #6c5ce7 100%);
+        }
+
+        .ending-bad {
+            background: linear-gradient(135deg, #2d3436 0%, #636e72 50%, #2d3436 100%);
+        }
+
+        .ending-title {
+            font-family: 'Caveat', cursive;
+            font-size: 4rem;
+            color: #fff;
+            text-shadow: 0 0 30px rgba(0, 0, 0, 0.5);
+            margin-bottom: 20px;
+        }
+
+        .ending-subtitle {
+            font-size: 1.5rem;
+            color: rgba(255, 255, 255, 0.9);
+            margin-bottom: 50px;
+            max-width: 600px;
+            text-align: center;
+            line-height: 1.6;
+        }
+
+        /* Effects */
+        .fade-in {
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .slide-up {
+            animation: slideUp 0.5s ease;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(50px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        /* Mobile Styles */
+        .mobile-mode #character-display {
+            bottom: 30%;
+        }
+
+        .mobile-mode .character-sprite {
+            width: 120px;
+            height: 200px;
+        }
+
+        .mobile-mode .character-avatar {
+            width: 80px;
+            height: 80px;
+            font-size: 35px;
+        }
+
+        .mobile-mode #dialog-box {
+            min-height: 30%;
+            padding: 15px;
+        }
+
+        .mobile-mode #speaker-name {
+            font-size: 1rem;
+        }
+
+        .mobile-mode #dialog-text {
+            font-size: 0.95rem;
+        }
+
+        .mobile-mode .choice-btn {
+            padding: 15px 20px;
+            font-size: 1rem;
+        }
+
+        .mobile-mode #affection-container {
+            top: 10px;
+            left: 10px;
+            padding: 10px 15px;
+        }
+
+        .mobile-mode #affection-bar {
+            width: 100px;
+        }
+
+        .mobile-mode .ui-btn {
+            width: 40px;
+            height: 40px;
+            font-size: 1rem;
+        }
+
+        .mobile-mode .platform-title {
+            font-size: 2.5rem;
+        }
+
+        .mobile-mode .platform-btn {
+            width: 150px;
+            height: 180px;
+        }
+
+        .mobile-mode .platform-icon {
+            font-size: 50px;
+        }
+
+        /* Typewriter effect */
+        .typewriter {
+            overflow: hidden;
+            border-right: 2px solid transparent;
+        }
+
+        /* Snow/Particles */
+        .particle {
+            position: absolute;
+            width: 5px;
+            height: 5px;
+            background: rgba(255, 255, 255, 0.6);
+            border-radius: 50%;
+            animation: fall linear infinite;
+        }
+
+        @keyframes fall {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(360deg); opacity: 0; }
+        }
+
+        /* Hearts animation */
+        .heart-float {
+            position: absolute;
+            font-size: 2rem;
+            animation: floatUp 2s ease-out forwards;
+            pointer-events: none;
+        }
+
+        @keyframes floatUp {
+            0% { opacity: 1; transform: translateY(0) scale(1); }
+            100% { opacity: 0; transform: translateY(-100px) scale(1.5); }
+        }
+
+        /* Scene transition */
+        #scene-transition {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            z-index: 500;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.5s ease;
+        }
+
+        #scene-transition.active {
+            opacity: 1;
+            pointer-events: all;
+        }
     </style>
-  </head>
-  <body>
-    <div id="root"></div>
-    <script type="module" src="/src/main.tsx"></script>
-  </body>
+</head>
+<body>
+    <!-- Scene Transition -->
+    <div id="scene-transition"></div>
+
+    <!-- Platform Selection -->
+    <div id="platform-select">
+        <h1 class="platform-title">Сердце Сатпаева</h1>
+        <p class="platform-subtitle">Визуальная новелла • Улытауская область</p>
+        <div class="platform-buttons">
+            <button class="platform-btn" onclick="selectPlatform('desktop')">
+                <span class="platform-icon">🖥️</span>
+                <span class="platform-label">Компьютер</span>
+            </button>
+            <button class="platform-btn" onclick="selectPlatform('mobile')">
+                <span class="platform-icon">📱</span>
+                <span class="platform-label">Телефон</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- Game Container -->
+    <div id="game-container">
+        <!-- Background -->
+        <div id="background" class="background bg-bus-stop"></div>
+        
+        <!-- Affection Meter -->
+        <div id="affection-container">
+            <div id="affection-label">💕 Симпатия Наргизы</div>
+            <div id="affection-bar">
+                <div id="affection-fill"></div>
+            </div>
+        </div>
+
+        <!-- UI Buttons -->
+        <div id="game-ui">
+            <button class="ui-btn" onclick="toggleMenu()" title="Меню">☰</button>
+            <button class="ui-btn" onclick="saveGame()" title="Сохранить">💾</button>
+            <button class="ui-btn" onclick="toggleAuto()" id="auto-btn" title="Авто">▶️</button>
+        </div>
+
+        <!-- Chapter Title -->
+        <div id="chapter-title"></div>
+
+        <!-- Character Display -->
+        <div id="character-display"></div>
+
+        <!-- Dialog Box -->
+        <div id="dialog-box" onclick="advanceDialog()">
+            <div id="speaker-name">???</div>
+            <div id="dialog-text"></div>
+            <div id="continue-hint">▼ Нажмите, чтобы продолжить</div>
+        </div>
+
+        <!-- Choices Container -->
+        <div id="choices-container"></div>
+    </div>
+
+    <!-- Menu Overlay -->
+    <div id="menu-overlay">
+        <div class="menu-content">
+            <h2 class="menu-title">Меню</h2>
+            <button class="menu-btn" onclick="toggleMenu()">Продолжить</button>
+            <button class="menu-btn" onclick="saveGame()">Сохранить</button>
+            <button class="menu-btn" onclick="loadGame()">Загрузить</button>
+            <button class="menu-btn" onclick="restartGame()">Начать сначала</button>
+        </div>
+    </div>
+
+    <!-- Ending Screen -->
+    <div id="ending-screen">
+        <h1 class="ending-title"></h1>
+        <p class="ending-subtitle"></p>
+        <button class="menu-btn" onclick="restartGame()">Играть снова</button>
+    </div>
+
+    <script>
+        // Game State
+        let gameState = {
+            platform: null,
+            currentScene: 0,
+            affection: 30,
+            chapter: 1,
+            flags: {},
+            autoMode: false,
+            dialogIndex: 0
+        };
+
+        // Story Data
+        const story = [
+            // Chapter 1: The Beginning
+            {
+                type: "chapter",
+                title: "Глава 1: Автобус 101",
+                background: "bg-bus-stop"
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Очередное утро в Сатпаеве... Опять этот автобус 101 до Жезказгана. Каждый день одно и то же — поездка в Политехнический колледж.",
+                background: "bg-bus-stop",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Улытауская область... Не самое романтичное место на свете, но это мой дом. Стою на остановке, жду маршрутку.",
+                background: "bg-bus-stop",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Эй, Бибарыс! Чего такой задумчивый с утра пораньше?",
+                background: "bg-bus-stop",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "О, Ариф! Да так, не выспался просто. Опять до ночи проект делал.",
+                background: "bg-bus-stop",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Хах, типичный ты! Слушай, а ты заметил ту девушку? Которая тоже каждый день на 101-м ездит?",
+                background: "bg-bus-stop",
+                characters: ["arif"]
+            },
+            {
+                type: "choice",
+                question: "Что ответить Арифу?",
+                choices: [
+                    { text: "Какую девушку? Не замечал никого особенного.", next: 7, affection: 0 },
+                    { text: "Ты про ту симпатичную с медицинского? Конечно заметил!", next: 9, affection: 5 },
+                    { text: "Мне некогда по сторонам смотреть, я учусь.", next: 11, affection: -5 }
+                ]
+            },
+            // Choice 1 path
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Ну ты даёшь! Она же каждый день рядом стоит! В медицинский колледж ездит. Наргиза её зовут, кажется.",
+                background: "bg-bus-stop",
+                characters: ["arif"],
+                nextScene: 13
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Наргиза... Интересное имя.",
+                background: "bg-bus-stop",
+                characters: ["arif"],
+                nextScene: 13
+            },
+            // Choice 2 path
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "О-о-о! Так ты уже глаз положил! Ха-ха! Её Наргиза зовут, в медицинском учится.",
+                background: "bg-bus-stop",
+                characters: ["arif"],
+                nextScene: 13
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да ладно тебе... Просто она... выделяется как-то.",
+                background: "bg-bus-stop",
+                characters: ["arif"],
+                nextScene: 13
+            },
+            // Choice 3 path
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Эх, Бибарыс... Так всю жизнь проучишься и ничего интересного не увидишь. Ладно, молчу.",
+                background: "bg-bus-stop",
+                characters: ["arif"],
+                nextScene: 13
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Может он и прав... Но мне сейчас не до этого.)",
+                background: "bg-bus-stop",
+                characters: ["arif"],
+                nextScene: 13
+            },
+            // Continue story
+            {
+                type: "dialog",
+                speaker: "",
+                text: "И тут я её увидел. Она шла к остановке, укутанная в бежевое пальто. Длинные тёмные волосы развевались на ветру...",
+                background: "bg-bus-stop",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Вот она... Наргиза. Теперь я понимаю, о ком говорил Ариф. Почему я раньше её не замечал?)",
+                background: "bg-bus-stop",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "*шёпотом* Вон-вон, смотри! Подошла! Иди поздоровайся!",
+                background: "bg-bus-stop",
+                characters: ["nargiza", "arif"]
+            },
+            {
+                type: "choice",
+                question: "Что делать?",
+                choices: [
+                    { text: "Подойти и поздороваться", next: 17, affection: 10 },
+                    { text: "Подождать удобного момента", next: 20, affection: 0 },
+                    { text: "Сделать вид, что не замечаю", next: 22, affection: -10 }
+                ]
+            },
+            // Choice: Say hello
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "П-привет! Ты тоже на 101-й ждёшь?",
+                background: "bg-bus-stop",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*удивлённо* О, привет! Да, в Жезказган еду. В медицинский колледж.",
+                background: "bg-bus-stop",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*улыбается* Мы, кажется, каждый день в одно время здесь встречаемся. Я тебя тоже замечала.",
+                background: "bg-bus-stop",
+                characters: ["nargiza"],
+                nextScene: 24
+            },
+            // Choice: Wait
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Лучше подождать... Сейчас как-то неудобно.)",
+                background: "bg-bus-stop",
+                characters: ["nargiza"],
+                nextScene: 24
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Я остался стоять на месте. Наргиза бросила на меня короткий взгляд, но тут же отвернулась.",
+                background: "bg-bus-stop",
+                characters: ["nargiza"],
+                nextScene: 24
+            },
+            // Choice: Ignore
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Не буду отвлекаться. Учёба важнее.)",
+                background: "bg-bus-stop",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "*тихо* Эх, ты безнадёжен...",
+                background: "bg-bus-stop",
+                characters: ["nargiza", "arif"],
+                nextScene: 24
+            },
+            // Bus scene
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Автобус 101 подъехал. Народу было много — обычное утро между Сатпаевом и Жезказганом.",
+                background: "bg-bus",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(В автобусе тесно... О, она села у окна. Рядом с ней свободное место!)",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "choice",
+                question: "Сесть рядом с Наргизой?",
+                choices: [
+                    { text: "Да, это мой шанс!", next: 27, affection: 10 },
+                    { text: "Нет, лучше сяду с Арифом", next: 32, affection: -5 }
+                ]
+            },
+            // Sit with Nargiza
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Эм... Здесь свободно?",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Да, садись! *убирает сумку*",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Ты в Политехнический едешь, да? Я видела тебя возле того корпуса пару раз.",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да, учусь там. А ты в медицинском, верно? Будущий врач?",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*улыбается* Типа того. Хочу стать хирургом. Сложно, но интересно.",
+                background: "bg-bus",
+                characters: ["nargiza"],
+                nextScene: 35
+            },
+            // Sit with Arif
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Серьёзно? Такой шанс упускаешь!",
+                background: "bg-bus",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да ладно, ещё успею познакомиться...",
+                background: "bg-bus",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Я видел, как какой-то парень сел рядом с Наргизой. Они о чём-то оживлённо разговаривали. Почему-то мне стало не по себе...",
+                background: "bg-bus",
+                characters: ["arif"],
+                nextScene: 35
+            },
+            // Continue
+            {
+                type: "chapter",
+                title: "Глава 2: Случайные встречи",
+                background: "bg-college"
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Прошла неделя. Каждый день я ездил на том же автобусе, и каждый день видел Наргизу. Мы начали здороваться...",
+                background: "bg-college",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Слушай, Бибарыс, завтра же выходные. Может, в парк сходим? В Сатпаеве погода хорошая обещается.",
+                background: "bg-college",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да можно... А что там делать?",
+                background: "bg-college",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "*хитро улыбается* Ну мало ли... Вдруг кого-нибудь встретим? Например, студентку медколледжа?",
+                background: "bg-college",
+                characters: ["arif"]
+            },
+            {
+                type: "choice",
+                question: "Пойти в парк?",
+                choices: [
+                    { text: "Хорошо, уговорил!", next: 41, affection: 5, flag: "park_yes" },
+                    { text: "Не, лучше дома посижу", next: 45, affection: -10, flag: "park_no" }
+                ]
+            },
+            // Park scene
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Суббота. Парк в Сатпаеве. Осенние листья шуршат под ногами...",
+                background: "bg-park",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Ого, смотри кто там! Это же Наргиза!",
+                background: "bg-park",
+                characters: ["arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "О! Привет! Вы тоже гуляете?",
+                background: "bg-park",
+                characters: ["nargiza", "arif"]
+            },
+            {
+                type: "dialog",
+                speaker: "Ариф",
+                text: "Ага! Слушайте, мне тут... эээ... мама звонит! Я отойду! *убегает*",
+                background: "bg-park",
+                characters: ["nargiza"],
+                nextScene: 48
+            },
+            // Stayed home
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Я остался дома. Играл в игры, смотрел видео... Но почему-то было скучно.",
+                background: "bg-night",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Интересно, что Наргиза сейчас делает? Может, зря не пошёл...)",
+                background: "bg-night",
+                characters: [],
+                nextScene: 56
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "В понедельник в автобусе Наргиза была с каким-то парнем. Они смеялись...",
+                background: "bg-bus",
+                characters: ["nargiza"],
+                nextScene: 56
+            },
+            // Alone with Nargiza
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*смеётся* Какой у тебя друг... интересный.",
+                background: "bg-park",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да уж, Ариф такой... Слушай, раз уж мы здесь... Может, пройдёмся?",
+                background: "bg-park",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "С удовольствием! Я так рада, что в Сатпаеве есть такой парк. После Жезказгана хочется отдохнуть от города.",
+                background: "bg-park",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Ты давно здесь живёшь? В Сатпаеве?",
+                background: "bg-park",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Всю жизнь. Мои родители работают на комбинате. А ты?",
+                background: "bg-park",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Тоже местный. Получается, мы могли раньше встречаться, но как-то не пересекались.",
+                background: "bg-park",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Судьба! *улыбается* Значит, встретились, когда нужно было.",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "choice",
+                question: "Момент очень романтичный. Что сказать?",
+                choices: [
+                    { text: "\"Ты очень красивая сегодня...\"", next: 57, affection: 15 },
+                    { text: "\"Может, обменяемся номерами?\"", next: 60, affection: 10 },
+                    { text: "\"Ну да, совпадение...\" *молчать*", next: 63, affection: -5 }
+                ]
+            },
+            // Romantic choice
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*краснеет* Ч-что? Это так неожиданно...",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Спасибо... Ты тоже ничего. *смущённо отводит взгляд*",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Сердце бьётся так громко... Кажется, она тоже смутилась!)",
+                background: "bg-evening",
+                characters: ["nargiza"],
+                nextScene: 66
+            },
+            // Phone number
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "О, хорошая идея! Давай! Пиши: 8-7...",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Записал! Я напишу тебе сегодня вечером.",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*улыбается* Буду ждать.",
+                background: "bg-evening",
+                characters: ["nargiza"],
+                nextScene: 66
+            },
+            // Awkward silence
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "...",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Ну ладно... Мне пора, наверное. Пока!",
+                background: "bg-evening",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Чёрт, надо было что-то сказать! Какой же я идиот...)",
+                background: "bg-evening",
+                characters: [],
+                nextScene: 66
+            },
+            // Chapter 3
+            {
+                type: "chapter",
+                title: "Глава 3: Чувства",
+                background: "bg-night"
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Прошёл месяц. Мы с Наргизой стали общаться каждый день. В автобусе всегда садились вместе...",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Знаешь, у нас скоро сессия. Такой стресс! Столько всего учить...",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да, в Политехе тоже жесть. Особенно с черчением замучили.",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Слушай... Если не сложно... Можешь помочь мне разобраться с физикой? Я вообще не понимаю электричество!",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "choice",
+                question: "Помочь Наргизе с физикой?",
+                choices: [
+                    { text: "Конечно! Можем в кафе встретиться после пар", next: 72, affection: 15 },
+                    { text: "Давай, но только онлайн объясню", next: 75, affection: 5 },
+                    { text: "Извини, самому времени не хватает", next: 77, affection: -20 }
+                ]
+            },
+            // Cafe date
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*радостно* Правда? Это было бы супер! В каком кафе? В Жезказгане или в Сатпаеве?",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Давай в Сатпаеве, после того как вернёмся. Там есть уютное место у центра.",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Отлично! Это как... свидание? *смущённо смеётся*",
+                background: "bg-bus",
+                characters: ["nargiza"],
+                nextScene: 80
+            },
+            // Online help
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "А... Ладно, тоже вариант. Спасибо.",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Кажется, она расстроилась... Может, надо было согласиться на встречу?)",
+                background: "bg-bus",
+                characters: ["nargiza"],
+                nextScene: 80
+            },
+            // Reject
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "О... Понятно. Ну ладно, я попрошу кого-нибудь другого.",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Она отвернулась к окну. Остаток пути мы ехали молча. Я чувствовал, что что-то сломалось...",
+                background: "bg-bus",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Почему я так сказал? Это же был шанс побыть с ней наедине...)",
+                background: "bg-bus",
+                characters: ["nargiza"],
+                nextScene: 80
+            },
+            // Cafe scene
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Вечер того же дня. Кафе в центре Сатпаева...",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Ааа, так вот как это работает! Теперь понятно! Ты хорошо объясняешь.",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Да это не так сложно, когда понимаешь логику. Ты умная, просто тебе не так объяснили.",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*улыбается* Спасибо... Бибарыс, а можно спросить кое-что личное?",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Конечно, спрашивай.",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "У тебя... есть кто-нибудь? Ну, девушка?",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "choice",
+                question: "Как ответить?",
+                choices: [
+                    { text: "\"Нет. Но есть одна, которая мне нравится...\" *смотреть ей в глаза*", next: 87, affection: 20 },
+                    { text: "\"Нет, пока нет\"", next: 90, affection: 5 },
+                    { text: "\"А почему ты спрашиваешь?\" *уйти от ответа*", next: 92, affection: 0 }
+                ]
+            },
+            // Confession hint
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*краснеет* И... кто она?",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Думаю, ты догадываешься...",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*тихо* Бибарыс...",
+                background: "bg-cafe",
+                characters: ["nargiza"],
+                nextScene: 95
+            },
+            // Simple no
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Понятно... *загадочно улыбается*",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "А ты?",
+                background: "bg-cafe",
+                characters: ["nargiza"],
+                nextScene: 95
+            },
+            // Deflect
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Просто интересно... *отводит взгляд*",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "(Кажется, она хотела услышать что-то другое...)",
+                background: "bg-cafe",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Ладно, неважно. Давай дальше заниматься.",
+                background: "bg-cafe",
+                characters: ["nargiza"],
+                nextScene: 95
+            },
+            // Final chapter
+            {
+                type: "chapter",
+                title: "Глава 4: Развязка",
+                background: "bg-evening"
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Зима в Улытауской области. Снег укрыл Сатпаев белым одеялом. На остановке 101 маршрута...",
+                background: "bg-night",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Бибарыс! *машет рукой* Холодно сегодня, да?",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Очень. Хорошо, что автобус обычно тёплый.",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*ёжится* Знаешь... Мне нужно тебе что-то сказать.",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Что такое?",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "Я... Эти месяцы с тобой... Поездки в автобусе, наши встречи... Это было лучшее время в моей жизни.",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*смотрит прямо в глаза* Бибарыс, ты нравишься мне. Очень.",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "choice",
+                question: "Это признание! Что ответить?",
+                choices: [
+                    { text: "\"Наргиза... Ты тоже мне нравишься. Давно.\"", next: 104, affection: 25, flag: "confession_accept" },
+                    { text: "\"Я... мне нужно время подумать\"", next: 109, affection: -10, flag: "confession_delay" },
+                    { text: "\"Извини, я думаю о тебе только как о друге\"", next: 113, affection: -30, flag: "confession_reject" }
+                ]
+            },
+            // Accept confession - Good Ending path
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*глаза светятся* Правда?!",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Правда. С того самого дня, когда мы впервые заговорили на этой остановке... Нет, ещё раньше. Когда я увидел тебя впервые.",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*обнимает* Я так счастлива... Так счастлива!",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Наргиза... Будь моей девушкой?",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*сквозь слёзы радости* Да! Да, конечно да!",
+                background: "bg-night",
+                characters: ["nargiza"],
+                nextScene: "good_ending"
+            },
+            // Delay - Neutral/Bad ending
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*улыбка гаснет* Время?.. Понятно...",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Нет, ты не так поняла! Просто это так неожиданно...",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*грустно* Всё нормально. Я подожду. Но... не слишком долго, хорошо?",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Она села в автобус. Я остался стоять на морозе, не зная, что делать...",
+                background: "bg-night",
+                characters: [],
+                nextScene: "neutral_ending"
+            },
+            // Reject - Bad ending
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*голос дрожит* Как... друге?",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Бибарыс",
+                text: "Извини... Я не хотел тебя ранить.",
+                background: "bg-night",
+                characters: ["nargiza"]
+            },
+            {
+                type: "dialog",
+                speaker: "Наргиза",
+                text: "*слёзы на глазах* Я... я понимаю. Спасибо за честность. Пока.",
+                background: "bg-rain",
+                characters: []
+            },
+            {
+                type: "dialog",
+                speaker: "",
+                text: "Она убежала, не дождавшись автобуса. Я стоял один на холодной остановке, понимая, что потерял что-то важное...",
+                background: "bg-rain",
+                characters: [],
+                nextScene: "bad_ending"
+            }
+        ];
+
+        // Endings
+        const endings = {
+            good_ending: {
+                type: "good",
+                title: "ХОРОШАЯ КОНЦОВКА",
+                subtitle: "\"Сердце Сатпаева\"\n\nМы с Наргизой начали встречаться. Каждое утро в автобусе 101 теперь было наполнено счастьем. Она держала меня за руку, пока мы ехали из Сатпаева в Жезказган.\n\nАриф шутил, что он был лучшим другом-свахой. Может, он и прав.\n\nНаша история только начинается...\n\n💕 Спасибо за игру! 💕"
+            },
+            neutral_ending: {
+                type: "bad",
+                title: "НЕЙТРАЛЬНАЯ КОНЦОВКА",
+                subtitle: "\"Упущенный момент\"\n\nЯ так и не дал ей ответ. Через неделю я увидел, как Наргиза шла под руку с другим парнем. Она улыбалась, но когда наши глаза встретились — в её взгляде была грусть.\n\nИногда мы всё ещё ездим в одном автобусе. Но садимся в разных концах.\n\nМожет, если бы я был смелее...\n\n💔 Конец"
+            },
+            bad_ending: {
+                type: "bad",
+                title: "ПЛОХАЯ КОНЦОВКА",
+                subtitle: "\"Одиночество\"\n\nНаргиза перестала ездить на автобусе 101. Арif сказал, что она попросила родителей отвозить её на машине.\n\nЯ потерял её. И только теперь понял, что она значила для меня.\n\nАвтобусная остановка в Сатпаеве кажется такой пустой без неё...\n\n💔 Конец"
+            },
+            very_bad_ending: {
+                type: "bad",
+                title: "САМАЯ ПЛОХАЯ КОНЦОВКА",
+                subtitle: "\"Чужие\"\n\nЯ так и не узнал её имя. Девушка с остановки осталась просто девушкой с остановки.\n\nАриф говорит, что я зря трачу жизнь на учебники. Может, он прав.\n\nНо уже слишком поздно что-то менять...\n\n💔 Конец"
+            }
+        };
+
+        // Platform Selection
+        function selectPlatform(platform) {
+            gameState.platform = platform;
+            if (platform === 'mobile') {
+                document.body.classList.add('mobile-mode');
+            }
+            document.getElementById('platform-select').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            startGame();
+        }
+
+        // Start Game
+        function startGame() {
+            gameState.currentScene = 0;
+            gameState.affection = 30;
+            gameState.flags = {};
+            showScene();
+        }
+
+        // Show Scene
+        function showScene() {
+            const scene = story[gameState.currentScene];
+            if (!scene) {
+                checkEnding();
+                return;
+            }
+
+            if (scene.type === "chapter") {
+                showChapterTitle(scene);
+            } else if (scene.type === "dialog") {
+                showDialog(scene);
+            } else if (scene.type === "choice") {
+                showChoices(scene);
+            }
+        }
+
+        // Chapter Title
+        function showChapterTitle(scene) {
+            const chapterTitle = document.getElementById('chapter-title');
+            const bg = document.getElementById('background');
+            
+            bg.className = 'background ' + scene.background;
+            chapterTitle.textContent = scene.title;
+            chapterTitle.style.opacity = '0';
+            document.getElementById('dialog-box').style.display = 'none';
+            
+            // Animate
+            setTimeout(() => {
+                chapterTitle.style.transition = 'opacity 1s ease';
+                chapterTitle.style.opacity = '1';
+            }, 100);
+            
+            setTimeout(() => {
+                chapterTitle.style.opacity = '0';
+                setTimeout(() => {
+                    document.getElementById('dialog-box').style.display = 'block';
+                    gameState.currentScene++;
+                    showScene();
+                }, 500);
+            }, 2500);
+        }
+
+        // Show Dialog
+        function showDialog(scene) {
+            const bg = document.getElementById('background');
+            const speakerName = document.getElementById('speaker-name');
+            const dialogText = document.getElementById('dialog-text');
+            const characterDisplay = document.getElementById('character-display');
+            const choicesContainer = document.getElementById('choices-container');
+            
+            // Hide choices
+            choicesContainer.style.display = 'none';
+            
+            // Set background
+            if (scene.background) {
+                bg.className = 'background ' + scene.background;
+            }
+            
+            // Set speaker
+            speakerName.textContent = scene.speaker || 'Рассказчик';
+            
+            // Typewriter effect
+            typeWriter(dialogText, scene.text);
+            
+            // Show characters
+            updateCharacters(scene.characters || []);
+            
+            // Update affection
+            updateAffection();
+        }
+
+        // Type Writer Effect
+        function typeWriter(element, text, speed = 30) {
+            element.textContent = '';
+            let i = 0;
+            
+            function type() {
+                if (i < text.length) {
+                    element.textContent += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                }
+            }
+            type();
+        }
+
+        // Update Characters
+        function updateCharacters(characters) {
+            const display = document.getElementById('character-display');
+            display.innerHTML = '';
+            
+            characters.forEach(char => {
+                const charDiv = document.createElement('div');
+                charDiv.className = 'character fade-in';
+                
+                let emoji, name, colorClass;
+                if (char === 'nargiza') {
+                    emoji = '👩';
+                    name = 'Наргиза';
+                    colorClass = 'nargiza-avatar';
+                } else if (char === 'arif') {
+                    emoji = '👨';
+                    name = 'Ариф';
+                    colorClass = 'arif-avatar';
+                }
+                
+                charDiv.innerHTML = `
+                    <div class="character-sprite">
+                        <div class="character-avatar ${colorClass}">${emoji}</div>
+                        <div class="character-name-tag">${name}</div>
+                    </div>
+                `;
+                display.appendChild(charDiv);
+            });
+        }
+
+        // Show Choices
+        function showChoices(scene) {
+            const choicesContainer = document.getElementById('choices-container');
+            const continueHint = document.getElementById('continue-hint');
+            
+            continueHint.style.display = 'none';
+            choicesContainer.style.display = 'flex';
+            choicesContainer.innerHTML = '';
+            
+            scene.choices.forEach((choice, index) => {
+                const btn = document.createElement('button');
+                btn.className = 'choice-btn slide-up';
+                btn.style.animationDelay = (index * 0.1) + 's';
+                btn.textContent = choice.text;
+                btn.onclick = () => makeChoice(choice);
+                choicesContainer.appendChild(btn);
+            });
+        }
+
+        // Make Choice
+        function makeChoice(choice) {
+            gameState.affection += choice.affection || 0;
+            
+            if (choice.flag) {
+                gameState.flags[choice.flag] = true;
+            }
+            
+            // Show heart animation for positive choices
+            if (choice.affection > 0) {
+                showHearts();
+            }
+            
+            document.getElementById('choices-container').style.display = 'none';
+            document.getElementById('continue-hint').style.display = 'block';
+            
+            gameState.currentScene = choice.next;
+            showScene();
+            updateAffection();
+        }
+
+        // Show Hearts Animation
+        function showHearts() {
+            for (let i = 0; i < 5; i++) {
+                setTimeout(() => {
+                    const heart = document.createElement('div');
+                    heart.className = 'heart-float';
+                    heart.textContent = '💕';
+                    heart.style.left = Math.random() * window.innerWidth + 'px';
+                    heart.style.top = window.innerHeight * 0.5 + 'px';
+                    document.body.appendChild(heart);
+                    
+                    setTimeout(() => heart.remove(), 2000);
+                }, i * 100);
+            }
+        }
+
+        // Advance Dialog
+        function advanceDialog() {
+            const scene = story[gameState.currentScene];
+            if (!scene || scene.type === "choice" || scene.type === "chapter") return;
+            
+            if (scene.nextScene) {
+                if (typeof scene.nextScene === 'string') {
+                    showEnding(scene.nextScene);
+                    return;
+                }
+                gameState.currentScene = scene.nextScene;
+            } else {
+                gameState.currentScene++;
+            }
+            
+            showScene();
+        }
+
+        // Update Affection
+        function updateAffection() {
+            const fill = document.getElementById('affection-fill');
+            let percentage = Math.max(0, Math.min(100, gameState.affection));
+            fill.style.width = percentage + '%';
+            
+            // Change color based on level
+            if (percentage < 30) {
+                fill.style.background = 'linear-gradient(90deg, #636e72, #b2bec3)';
+            } else if (percentage < 60) {
+                fill.style.background = 'linear-gradient(90deg, #fdcb6e, #f39c12)';
+            } else {
+                fill.style.background = 'linear-gradient(90deg, #ff6b9d, #ff8fab)';
+            }
+        }
+
+        // Check Ending
+        function checkEnding() {
+            if (gameState.affection >= 80) {
+                showEnding('good_ending');
+            } else if (gameState.affection >= 40) {
+                showEnding('neutral_ending');
+            } else if (gameState.affection >= 20) {
+                showEnding('bad_ending');
+            } else {
+                showEnding('very_bad_ending');
+            }
+        }
+
+        // Show Ending
+        function showEnding(endingKey) {
+            const ending = endings[endingKey];
+            const endingScreen = document.getElementById('ending-screen');
+            const endingTitle = endingScreen.querySelector('.ending-title');
+            const endingSubtitle = endingScreen.querySelector('.ending-subtitle');
+            
+            endingScreen.className = ending.type === 'good' ? 'ending-good' : 'ending-bad';
+            endingScreen.style.display = 'flex';
+            endingTitle.textContent = ending.title;
+            endingSubtitle.textContent = ending.subtitle;
+        }
+
+        // Menu Functions
+        function toggleMenu() {
+            const menu = document.getElementById('menu-overlay');
+            menu.style.display = menu.style.display === 'flex' ? 'none' : 'flex';
+        }
+
+        function saveGame() {
+            localStorage.setItem('serdceSatpaeva', JSON.stringify(gameState));
+            alert('Игра сохранена!');
+        }
+
+        function loadGame() {
+            const saved = localStorage.getItem('serdceSatpaeva');
+            if (saved) {
+                gameState = JSON.parse(saved);
+                toggleMenu();
+                showScene();
+                updateAffection();
+            } else {
+                alert('Сохранение не найдено!');
+            }
+        }
+
+        function restartGame() {
+            document.getElementById('ending-screen').style.display = 'none';
+            document.getElementById('menu-overlay').style.display = 'none';
+            document.getElementById('game-container').style.display = 'block';
+            startGame();
+        }
+
+        function toggleAuto() {
+            gameState.autoMode = !gameState.autoMode;
+            document.getElementById('auto-btn').style.background = 
+                gameState.autoMode ? 'rgba(255, 107, 157, 0.7)' : 'rgba(0, 0, 0, 0.7)';
+            
+            if (gameState.autoMode) {
+                autoAdvance();
+            }
+        }
+
+        function autoAdvance() {
+            if (gameState.autoMode && story[gameState.currentScene]?.type !== 'choice') {
+                setTimeout(() => {
+                    advanceDialog();
+                    autoAdvance();
+                }, 3000);
+            }
+        }
+
+        // Keyboard Controls
+        document.addEventListener('keydown', (e) => {
+            if (e.code === 'Space' || e.code === 'Enter') {
+                advanceDialog();
+            } else if (e.code === 'Escape') {
+                toggleMenu();
+            }
+        });
+    </script>
+</body>
 </html>

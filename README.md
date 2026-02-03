@@ -1,1 +1,0 @@
-# bibarys-nargiz
